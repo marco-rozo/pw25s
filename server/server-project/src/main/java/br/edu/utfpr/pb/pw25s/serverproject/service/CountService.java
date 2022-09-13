@@ -16,8 +16,8 @@ public class CountService {
         this.countRepository = countRepository;
     }
 
-    public Count save(Count user) {
-        return countRepository.save(user);
+    public Count save(Count count) {
+        return countRepository.save(count);
     }
 
 }

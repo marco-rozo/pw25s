@@ -23,7 +23,7 @@ public class Count {
     private String type;
 
     @NotNull
-    private String number;
+    private Integer number;
 
     @NotNull
     private String agence;
