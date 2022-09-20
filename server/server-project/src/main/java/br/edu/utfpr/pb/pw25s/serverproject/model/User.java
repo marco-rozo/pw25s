@@ -1,5 +1,6 @@
 package br.edu.utfpr.pb.pw25s.serverproject.model;
 
+import br.edu.utfpr.pb.pw25s.serverproject.validation.UniqueUserEmail;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -22,9 +23,12 @@ public class User {
     private String lastName;
 
     @NotNull
+    @UniqueUserEmail
+    @NotNull(message = "{br.edu.utfpr.pb.pw25s.useremail}")
     private String email;
 
     @NotNull
+    @Size(min = 4, max = 255)
     private String password;
 
     @NotNull
