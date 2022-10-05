@@ -1,34 +1,38 @@
 package br.edu.utfpr.pb.pw25s.serverproject.model;
 
-import br.edu.utfpr.pb.pw25s.serverproject.validation.UniqueUserEmail;
 import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.Collection;
 
 @Data
 @Entity(name = "tb_user")
-public class User {
+public class User implements UserDetails {
     @Id
-    @GeneratedValue
+    @GeneratedValue()
     private long id;
 
     @NotNull
-    private String firtName;
+    private String firstName;
 
     @NotNull
     private String lastName;
 
     @NotNull
-    @UniqueUserEmail
+//    @UniqueUserEmail
     @NotNull(message = "{br.edu.utfpr.pb.pw25s.useremail}")
+    @Pattern(regexp = "[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+")
     private String email;
 
     @NotNull
-    @Size(min = 4, max = 255)
+    @Size(min = 4, max = 254)
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$")
     private String password;
 
     @NotNull
@@ -37,4 +41,33 @@ public class User {
     @NotNull
     private String phone;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return AuthorityUtils.createAuthorityList("Role_USER");
+    }
+
+    @Override
+    public String getUsername() {
+        return getEmail();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

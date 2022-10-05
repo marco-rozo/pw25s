@@ -6,13 +6,14 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class Count {
+@Entity
+public class Account {
     @Id
     @GeneratedValue
     private long id;
 
-    @NotNull
-    @OneToOne()
+//    @NotNull
+    @ManyToOne()
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -28,13 +29,6 @@ public class Count {
     @NotNull
     private String agence;
 
-    @NotNull
     private String description;
-
-    @NotNull
-    private String individualRegistration;
-
-    @NotNull
-    private String phone;
 
 }

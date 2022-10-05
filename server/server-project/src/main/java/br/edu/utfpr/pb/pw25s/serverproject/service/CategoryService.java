@@ -1,20 +1,24 @@
 package br.edu.utfpr.pb.pw25s.serverproject.service;
 
 import br.edu.utfpr.pb.pw25s.serverproject.model.Category;
-import br.edu.utfpr.pb.pw25s.serverproject.repository.CategoryRepository;
-import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-@Service
-public class CategoryService {
-    private final CategoryRepository categoryRepository;
+import java.util.List;
 
-    public CategoryService(CategoryRepository categoryRepository) {
+public interface CategoryService {
 
-        this.categoryRepository = categoryRepository;
-    }
+    Category save(Category category);
 
-    public Category save(Category category) {
-        return categoryRepository.save(category);
-    }
+    Category findOne(Long id);
 
+    List<Category> findAll();
+
+    Page<Category> findAll(Pageable pageable);
+
+    Long count();
+
+    Boolean exists(Long id);
+
+    void delete(Long id);
 }

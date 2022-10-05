@@ -2,13 +2,11 @@ package br.edu.utfpr.pb.pw25s.serverproject.model;
 
 import lombok.Data;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Data
+@Entity
 public class Category {
     @Id
     @GeneratedValue
@@ -22,7 +20,6 @@ public class Category {
     @NotNull
     private String name;
 
-    @NotNull
     private String description;
 
 }

@@ -2,28 +2,26 @@ package br.edu.utfpr.pb.pw25s.serverproject.model;
 
 import lombok.Data;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
+@Entity
 public class Movement {
     @Id
-    @GeneratedValue
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @NotNull
-    @OneToOne()
-    @JoinColumn(name = "count_id")
-    private Count count;
+    @ManyToOne()
+    @JoinColumn(name = "account_id")
+    private Account account;
 
-//    @NotNull
-//    @OneToOne()
-//    @JoinColumn(name = "category_id")
-//    private Category category;
+    @NotNull
+    @ManyToOne()
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     @NotNull
     private Double value;
@@ -37,7 +35,6 @@ public class Movement {
     @NotNull
     private String type;
 
-    @NotNull
     private LocalDateTime dtPayment;
 
     @NotNull
