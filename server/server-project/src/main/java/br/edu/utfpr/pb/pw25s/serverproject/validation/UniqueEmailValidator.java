@@ -6,11 +6,11 @@ import br.edu.utfpr.pb.pw25s.serverproject.repository.UserRepository;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class UniqueUserEmailValidator implements ConstraintValidator<UniqueUserEmail, String> {
+public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, String> {
 
     UserRepository userRepository;
 
-    public UniqueUserEmailValidator(UserRepository userRepository) {
+    public UniqueEmailValidator(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
