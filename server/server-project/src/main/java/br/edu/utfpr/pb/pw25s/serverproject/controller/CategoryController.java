@@ -18,11 +18,9 @@ import java.util.stream.Collectors;
 @RequestMapping("categories")
 public class CategoryController {
     private final CategoryService categoryService;
-    private final ModelMapper modelMapper;
 
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
-        this.modelMapper = new ModelMapper();
     }
 
     @PostMapping
