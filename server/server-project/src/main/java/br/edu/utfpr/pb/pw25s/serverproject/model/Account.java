@@ -9,8 +9,8 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class Account {
     @Id
-    @GeneratedValue
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
 //    @NotNull
     @ManyToOne()

@@ -9,10 +9,8 @@ import javax.validation.constraints.Null;
 
 @Data
 public class AccountDto {
-    @NotNull
-    private long userId;
+    private Long id;
 
-    @Null
     private User user;
 
     @NotNull

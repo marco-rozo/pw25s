@@ -1,49 +1,58 @@
 package br.edu.utfpr.pb.pw25s.serverproject.service.impl;
 
 import br.edu.utfpr.pb.pw25s.serverproject.dto.AccountDto;
+import br.edu.utfpr.pb.pw25s.serverproject.dto.Response.AccountResponseDto;
 import br.edu.utfpr.pb.pw25s.serverproject.model.Account;
+import br.edu.utfpr.pb.pw25s.serverproject.model.User;
 import br.edu.utfpr.pb.pw25s.serverproject.repository.AccountRepository;
-import br.edu.utfpr.pb.pw25s.serverproject.repository.CategoryRepository;
+import br.edu.utfpr.pb.pw25s.serverproject.repository.UserRepository;
 import br.edu.utfpr.pb.pw25s.serverproject.service.AccountService;
-import br.edu.utfpr.pb.pw25s.serverproject.utils.UtilsService;
+import br.edu.utfpr.pb.pw25s.serverproject.shared.SecurityContextShared;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
-    private final UtilsService utilsService;
+    private final UserRepository userRepository;
+
+    private final SecurityContextShared securityContextShared;
     private ModelMapper modelMapper;
 
-    public AccountServiceImpl(AccountRepository accountRepository, UtilsService utilsService) {
+    public AccountServiceImpl(AccountRepository accountRepository, UserRepository userRepository, SecurityContextShared securityContextShared) {
         this.accountRepository = accountRepository;
-        this.utilsService = utilsService;
-        this.modelMapper =  new ModelMapper();
+        this.userRepository = userRepository;
+        this.securityContextShared = securityContextShared;
+        this.modelMapper = new ModelMapper();
     }
+
     @Override
-    public Account save(AccountDto accountDto) {
+    public AccountResponseDto save(AccountDto accountDto) {
+        Object principal = securityContextShared.getPincipal();
+
+        User u = userRepository.findByEmail(principal.toString());
+        accountDto.setUser(u);
         Account account = convertDtoToEntity(accountDto);
-        account.setUser(utilsService.findUserById(accountDto.getUserId()));
 
-        accountRepository.save(account);
-
-        return null;
+        return convertEntityToDto(accountRepository.save(account));
     }
 
     @Override
-    public Account findOne(Long id) {
-        return null;
+    public AccountResponseDto findOne(Long id) {
+        return convertEntityToDto(accountRepository.findById(id).orElse(null));
     }
 
     @Override
-    public List<Account> findAll() {
-        return null;
+    public List<AccountResponseDto> findAll() {
+        return accountRepository.findAll().stream()
+                .map(this::convertEntityToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -63,7 +72,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void delete(Long id) {
-
+        accountRepository.deleteById(id);
     }
 
 
@@ -71,7 +80,7 @@ public class AccountServiceImpl implements AccountService {
         return modelMapper.map(accountDto, Account.class);
     }
 
-    private AccountDto convertEntityToDto(Account account) {
-        return modelMapper.map(account, AccountDto.class);
+    private AccountResponseDto convertEntityToDto(Account account) {
+        return modelMapper.map(account, AccountResponseDto.class);
     }
 }
