@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MovementServiceImpl implements MovementService {
@@ -47,13 +48,15 @@ public class MovementServiceImpl implements MovementService {
     }
 
     @Override
-    public Movement findOne(Long id) {
-        return movementRepository.findById(id).orElse(null);
+    public MovementResponseDto findOne(Long id) {
+        return convertEntityToDto(movementRepository.findById(id).orElse(null));
     }
 
     @Override
-    public List<Movement> findAll() {
-        return movementRepository.findAll();
+    public List<MovementResponseDto> findAll() {
+        return movementRepository.findAll().stream()
+                .map(this::convertEntityToDto)
+                .collect(Collectors.toList());
     }
 
     @Override

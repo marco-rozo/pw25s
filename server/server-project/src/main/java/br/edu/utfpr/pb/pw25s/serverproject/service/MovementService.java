@@ -12,9 +12,9 @@ public interface MovementService {
 
     MovementResponseDto save(MovementDto movementDto);
 
-    Movement findOne(Long id);
+    MovementResponseDto findOne(Long id);
 
-    List<Movement> findAll();
+    List<MovementResponseDto> findAll();
 
     Page<Movement> findAll(Pageable pageable);
 
