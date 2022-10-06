@@ -1,5 +1,6 @@
 package br.edu.utfpr.pb.pw25s.serverproject.model;
 
+import br.edu.utfpr.pb.pw25s.serverproject.validation.UniqueEmail;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -12,11 +13,13 @@ import javax.validation.constraints.Size;
 import java.util.Collection;
 
 @Data
-@Entity(name = "tb_user")
+@Entity
+@Table(name = "tb_user")
 public class User implements UserDetails {
+
     @Id
-    @GeneratedValue()
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @NotNull
     private String firstName;
@@ -25,8 +28,8 @@ public class User implements UserDetails {
     private String lastName;
 
     @NotNull
-//    @UniqueUserEmail
-    @NotNull(message = "{br.edu.utfpr.pb.pw25s.useremail}")
+    @UniqueEmail
+    @NotNull(message = "{br.edu.utfpr.pb.pw25s.email}")
     @Pattern(regexp = "[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+")
     private String email;
 

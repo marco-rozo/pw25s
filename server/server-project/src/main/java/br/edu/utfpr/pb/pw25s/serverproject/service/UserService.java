@@ -1,24 +1,20 @@
 package br.edu.utfpr.pb.pw25s.serverproject.service;
 
+import br.edu.utfpr.pb.pw25s.serverproject.dto.AccountDto;
+import br.edu.utfpr.pb.pw25s.serverproject.dto.Response.AccountResponseDto;
+import br.edu.utfpr.pb.pw25s.serverproject.dto.Response.UserResponseDto;
+import br.edu.utfpr.pb.pw25s.serverproject.model.Account;
 import br.edu.utfpr.pb.pw25s.serverproject.model.User;
-import br.edu.utfpr.pb.pw25s.serverproject.repository.UserRepository;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-@Service
-public class UserService {
-    private final UserRepository userRepository;
-    BCryptPasswordEncoder passwordEncoder;
+import java.util.List;
 
-    public UserService(UserRepository userRepository) {
+public interface UserService {
 
-        this.userRepository = userRepository;
-        passwordEncoder = new BCryptPasswordEncoder();
-    }
+    UserResponseDto save(User user);
 
-    public User save(User user) {
-        user.setPassword( passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
-    }
+    Boolean exists(Long id);
 
+    void delete(Long id);
 }
