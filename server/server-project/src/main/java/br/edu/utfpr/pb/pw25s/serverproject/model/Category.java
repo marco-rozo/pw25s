@@ -9,13 +9,8 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class Category {
     @Id
-    @GeneratedValue
-    private long id;
-
-    @NotNull
-    @OneToOne()
-    @JoinColumn(name = "user_id")
-    private User user;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @NotNull
     private String name;

@@ -4,15 +4,15 @@ import br.edu.utfpr.pb.pw25s.serverproject.dto.CategoryDto;
 import br.edu.utfpr.pb.pw25s.serverproject.model.Category;
 import br.edu.utfpr.pb.pw25s.serverproject.service.CategoryService;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("categories")
@@ -27,21 +27,31 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<CategoryDto> save(@RequestBody @Valid CategoryDto categoryDto) {
-        Category category = categoryService.save(
-                convertDtoToEntity(categoryDto));
+        CategoryDto category = categoryService.save(categoryDto);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(category.getId()).toUri();
 
-        return ResponseEntity.created(location).body(convertEntityToDto(category));
+        return ResponseEntity.created(location).body(category);
     }
 
-    private Category convertDtoToEntity(CategoryDto categoryDto) {
-        return modelMapper.map(categoryDto, Category.class);
+
+    @GetMapping("{id}") // http://localhost:8080/categories/1
+    public ResponseEntity<CategoryDto> findOne(@PathVariable Long id) {
+        return ResponseEntity.ok(categoryService.findOne(id));
     }
 
-    private CategoryDto convertEntityToDto(Category Category) {
-        return modelMapper.map(Category, CategoryDto.class);
+    @GetMapping
+    public ResponseEntity<List<CategoryDto>> findAll() {
+        return ResponseEntity.ok(
+                categoryService.findAll()
+        );
+    }
+
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        categoryService.delete(id);
     }
 
 

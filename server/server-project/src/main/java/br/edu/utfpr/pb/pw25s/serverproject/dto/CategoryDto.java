@@ -14,4 +14,6 @@ public class CategoryDto {
     @Size(min = 2, max = 50)
     private String name;
 
+    private String description;
+
 }
