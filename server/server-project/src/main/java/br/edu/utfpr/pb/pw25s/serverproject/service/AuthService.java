@@ -1,7 +1,7 @@
 package br.edu.utfpr.pb.pw25s.serverproject.service;
 
 import br.edu.utfpr.pb.pw25s.serverproject.model.User;
-import com.auth0.jwt.JWT;
+import br.edu.utfpr.pb.pw25s.serverproject.shared.SecurityContextShared;
 
 import br.edu.utfpr.pb.pw25s.serverproject.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,9 +13,20 @@ import org.springframework.stereotype.Service;
 public class AuthService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final SecurityContextShared securityContextShared;
 
-    public AuthService(UserRepository userRepository) {
+
+    public AuthService(UserRepository userRepository, SecurityContextShared securityContextShared) {
         this.userRepository = userRepository;
+        this.securityContextShared = securityContextShared;
+    }
+
+    public boolean indetifyUser() throws UsernameNotFoundException {
+        Object principal = securityContextShared.getPincipal();
+
+        if (principal != null) return true;
+
+        throw new UsernameNotFoundException("Token invalido");
     }
 
     @Override //User nao possui Username, username = email
