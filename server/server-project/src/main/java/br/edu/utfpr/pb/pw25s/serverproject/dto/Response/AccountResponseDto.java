@@ -19,10 +19,8 @@ public class AccountResponseDto {
     @NotNull
     private String type;
 
-    @NotNull
     private Integer number;
 
-    @NotNull
     private String agence;
 
     private String description;

@@ -6,6 +6,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+import javax.validation.constraints.Size;
 
 @Data
 public class AccountDto {
@@ -14,15 +15,14 @@ public class AccountDto {
     private User user;
 
     @NotNull
+    @Size(min = 1, max = 254)
     private String name;
 
     @NotNull
     private String type;
 
-    @NotNull
     private Integer number;
 
-    @NotNull
     private String agence;
 
     private String description;
