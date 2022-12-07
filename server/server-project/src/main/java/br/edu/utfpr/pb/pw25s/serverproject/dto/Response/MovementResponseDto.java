@@ -1,5 +1,6 @@
 package br.edu.utfpr.pb.pw25s.serverproject.dto.Response;
 
+import br.edu.utfpr.pb.pw25s.serverproject.dto.CategoryDto;
 import br.edu.utfpr.pb.pw25s.serverproject.model.Account;
 import br.edu.utfpr.pb.pw25s.serverproject.model.Category;
 import lombok.Data;
@@ -15,9 +16,6 @@ public class MovementResponseDto {
     private Long accountId;
 
     @NotNull
-    private Long categoryId;
-
-    @NotNull
     private Double value;
 
     @NotNull
@@ -31,5 +29,9 @@ public class MovementResponseDto {
     private LocalDateTime dtPayment;
 
     private LocalDateTime dtDue;
+
+    private CategoryDto category;
+
+    private AccountResponseDto account;
 
 }
