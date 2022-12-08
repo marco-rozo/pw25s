@@ -50,7 +50,11 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public List<AccountResponseDto> findAll() {
-        return accountRepository.findAll().stream()
+        Object principal = securityContextShared.getPincipal();
+
+        User u = userRepository.findByEmail(principal.toString());
+
+        return accountRepository.findAccountsByUser(u).stream()
                 .map(this::convertEntityToDto)
                 .collect(Collectors.toList());
     }
