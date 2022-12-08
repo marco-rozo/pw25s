@@ -5,16 +5,20 @@ import br.edu.utfpr.pb.pw25s.serverproject.dto.Response.MovementResponseDto;
 import br.edu.utfpr.pb.pw25s.serverproject.model.Account;
 import br.edu.utfpr.pb.pw25s.serverproject.model.Category;
 import br.edu.utfpr.pb.pw25s.serverproject.model.Movement;
+import br.edu.utfpr.pb.pw25s.serverproject.model.User;
 import br.edu.utfpr.pb.pw25s.serverproject.repository.AccountRepository;
 import br.edu.utfpr.pb.pw25s.serverproject.repository.CategoryRepository;
 import br.edu.utfpr.pb.pw25s.serverproject.repository.MovementRepository;
+import br.edu.utfpr.pb.pw25s.serverproject.repository.UserRepository;
 import br.edu.utfpr.pb.pw25s.serverproject.service.MovementService;
+import br.edu.utfpr.pb.pw25s.serverproject.shared.SecurityContextShared;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,11 +29,18 @@ public class MovementServiceImpl implements MovementService {
     private final CategoryRepository categoryRepository;
     private ModelMapper modelMapper;
 
-    public MovementServiceImpl(MovementRepository movementRepository, CategoryRepository categoryRepository, AccountRepository accountRepository, ModelMapper modelMapper) {
+    private final UserRepository userRepository;
+    private final SecurityContextShared securityContextShared;
+
+
+    public MovementServiceImpl(MovementRepository movementRepository, CategoryRepository categoryRepository,
+                               AccountRepository accountRepository, ModelMapper modelMapper, SecurityContextShared securityContextShared, UserRepository userRepository) {
         this.movementRepository = movementRepository;
         this.categoryRepository = categoryRepository;
         this.accountRepository = accountRepository;
         this.modelMapper = modelMapper;
+        this.securityContextShared = securityContextShared;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -54,7 +65,24 @@ public class MovementServiceImpl implements MovementService {
 
     @Override
     public List<MovementResponseDto> findAll() {
-        return movementRepository.findAll().stream()
+        Object principal = securityContextShared.getPincipal();
+
+        User u = userRepository.findByEmail(principal.toString());
+
+        List<Account> accounts = accountRepository.findAccountsByUser(u);
+        List<Movement> movements = new ArrayList<Movement>();
+
+        if (accounts.size() > 0){
+            for(Account account : accounts){
+                System.out.println(account.getName());
+                System.out.println(account.getName());
+                List<Movement> m = movementRepository.findAllByAccount(account);
+                movements.addAll(m);
+            }
+        }
+        System.out.println(movements);
+
+        return movements.stream()
                 .map(this::convertEntityToDto)
                 .collect(Collectors.toList());
     }
