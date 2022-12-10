@@ -2,6 +2,7 @@ package br.edu.utfpr.pb.pw25s.serverproject.service.impl;
 
 import br.edu.utfpr.pb.pw25s.serverproject.dto.CategoryDto;
 import br.edu.utfpr.pb.pw25s.serverproject.model.Category;
+import br.edu.utfpr.pb.pw25s.serverproject.model.Movement;
 import br.edu.utfpr.pb.pw25s.serverproject.repository.CategoryRepository;
 import br.edu.utfpr.pb.pw25s.serverproject.repository.MovementRepository;
 import br.edu.utfpr.pb.pw25s.serverproject.service.CategoryService;
@@ -63,8 +64,9 @@ public class CategoryServiceImpl implements CategoryService {
     public void delete(Long id) {
         Category category = categoryRepository.findById(id).orElse(null);
 
-        movementRepository.deleteMovementByCategory(category);
-        categoryRepository.deleteById(id);
+        List<Movement> m = movementRepository.findAllByCategory(category);
+
+        if (m.size() < 1) categoryRepository.deleteById(id);
     }
 
     private Category convertDtoToEntity(CategoryDto categoryDto) {
