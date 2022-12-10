@@ -123,7 +123,7 @@ public class DashboardServiceImpl implements DashboardService {
         dash.setValueTotalExpensesPaid(e.getValuePaid());
         dash.setValueRemainingExpenses(e.getValueExpenses() - e.getValuePaid());
 
-        dash.setBalance(dash.getValueTotalReceipts() - dash.getValueTotalExpenses());
+        dash.setBalance(dash.getValueTotalReceipts() - dash.getValueRemainingExpenses());
 
         return dash;
     }
