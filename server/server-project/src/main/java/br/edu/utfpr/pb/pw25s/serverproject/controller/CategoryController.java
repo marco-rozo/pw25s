@@ -1,6 +1,8 @@
 package br.edu.utfpr.pb.pw25s.serverproject.controller;
 
+import br.edu.utfpr.pb.pw25s.serverproject.dto.AccountDto;
 import br.edu.utfpr.pb.pw25s.serverproject.dto.CategoryDto;
+import br.edu.utfpr.pb.pw25s.serverproject.dto.Response.AccountResponseDto;
 import br.edu.utfpr.pb.pw25s.serverproject.model.Category;
 import br.edu.utfpr.pb.pw25s.serverproject.service.CategoryService;
 import org.modelmapper.ModelMapper;
@@ -52,5 +54,10 @@ public class CategoryController {
         categoryService.delete(id);
     }
 
+    @PutMapping
+    public ResponseEntity<CategoryDto> update(@RequestBody @Valid CategoryDto accountDto) {
+        CategoryDto category = categoryService.save(accountDto);
 
+        return ResponseEntity.ok(category);
+    }
 }
