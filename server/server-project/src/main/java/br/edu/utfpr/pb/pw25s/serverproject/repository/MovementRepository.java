@@ -12,4 +12,5 @@ import java.util.List;
 public interface MovementRepository extends JpaRepository<Movement, Long> {
     void deleteMovementByCategory(Category category);
     List<Movement> findAllByAccount(Account account);
+    List<Movement> findAllByCategory(Category Category);
 }
